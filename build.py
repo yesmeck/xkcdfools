@@ -70,4 +70,4 @@ if __name__=="__main__":
     if len(sys.argv) == 2 and sys.argv[1] == "clean":
         clean("build")
     else:
-        build("src", "build")
+        build("src", "../")
