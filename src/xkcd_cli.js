@@ -186,7 +186,15 @@ function linkFile(url) {
 	}};
 }
 
-Filesystem = {};
+Filesystem = {
+    'contact.txt': {
+        type: 'file',
+        read: function(terminal) {
+            terminal.print('My Gtalk/Email:');
+            terminal.print('echo eWVzbWVja0BnbWFpbC5jb20K | base64 -d');
+        }
+    },
+};
 Filesystem['blog'] = linkFile('http://blog.yesmeck.com');
 Filesystem['douban'] = linkFile('http://www.douban.com/people/coolzi/');
 Filesystem['github'] = linkFile('https://github.com/yesmeck');
