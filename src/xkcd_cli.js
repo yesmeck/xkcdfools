@@ -186,39 +186,10 @@ function linkFile(url) {
 	}};
 }
 
-Filesystem = {
-	'welcome.txt': {type:'file', read:function(terminal) {
-		terminal.print($('<h4>').text('Welcome to the unixkcd console.'));
-		terminal.print('To navigate the comics, enter "next", "prev", "first", "last", "display", or "random".');
-		terminal.print('Use "ls", "cat", and "cd" to navigate the filesystem.');
-	}},
-	'license.txt': {type:'file', read:function(terminal) {
-		terminal.print($('<p>').html('Client-side logic for Wordpress CLI theme :: <a href="http://thrind.xamai.ca/">R. McFarland, 2006, 2007, 2008</a>'));
-		terminal.print($('<p>').html('jQuery rewrite and overhaul :: <a href="http://www.chromakode.com/">Chromakode, 2010</a>'));
-		terminal.print();
-		$.each([
-			'This program is free software; you can redistribute it and/or',
-			'modify it under the terms of the GNU General Public License',
-			'as published by the Free Software Foundation; either version 2',
-			'of the License, or (at your option) any later version.',
-			'',
-			'This program is distributed in the hope that it will be useful,',
-			'but WITHOUT ANY WARRANTY; without even the implied warranty of',
-			'MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the',
-			'GNU General Public License for more details.',
-			'',
-			'You should have received a copy of the GNU General Public License',
-			'along with this program; if not, write to the Free Software',
-			'Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.'
-		], function(num, line) {
-			terminal.print(line);
-		});
-	}}
-};
-Filesystem['blog'] = Filesystem['blag'] = linkFile('http://blag.xkcd.com');
-Filesystem['forums'] = Filesystem['fora'] = linkFile('http://forums.xkcd.com/');
-Filesystem['store'] = linkFile('http://store.xkcd.com/');
-Filesystem['about'] = linkFile('http://xkcd.com/about/');
+Filesystem = {};
+Filesystem['blog'] = linkFile('http://blog.yesmeck.com');
+Filesystem['douban'] = linkFile('http://www.douban.com/people/coolzi/');
+Filesystem['github'] = linkFile('https://github.com/yesmeck');
 TerminalShell.pwd = Filesystem;
 
 TerminalShell.commands['cd'] = function(terminal, path) {
@@ -507,7 +478,16 @@ TerminalShell.commands['sleep'] = function(terminal, duration) {
 
 // No peeking!
 TerminalShell.commands['help'] = TerminalShell.commands['halp'] = function(terminal) {
-	terminal.print('That would be cheating!');
+	var lines = [
+        'ls     - List directory contents',
+        'cat    - Concatenate files and print on the standard output',
+        'cd     - Change the working directory'
+	];
+	var name_list = $('<ul>');
+	$.each(lines, function(num, line) {
+		name_list.append($('<li>').text(line));
+	});
+	terminal.print(name_list);
 }; 
 
 TerminalShell.fallback = function(terminal, cmd) {
@@ -594,10 +574,7 @@ $(document).ready(function() {
 		xkcd.get(null, function(data) {
 			if (data) {
 				xkcd.latest = data;
-				$('#screen').one('cli-ready', function(e) {
-					Terminal.runCommand('cat welcome.txt');
-				});
-				Terminal.runCommand('display '+xkcd.latest.num+'/'+pathFilename(xkcd.latest.img));
+				Terminal.promptActive = true;
 			} else {
 				noData();
 			}
