@@ -201,10 +201,12 @@ Filesystem['github'] = linkFile('https://github.com/yesmeck');
 TerminalShell.pwd = Filesystem;
 
 TerminalShell.commands['cd'] = function(terminal, path) {
-	if (path in this.pwd) {
-		if (this.pwd[path].type == 'dir') {
-			this.pwd[path].enter(terminal);
-		} else if (this.pwd[path].type == 'file') {
+    //remove right slash
+    trimedPath = path.replace(/\/$/, '');
+	if (trimedPath in this.pwd) {
+		if (this.pwd[trimedPath].type == 'dir') {
+			this.pwd[trimedPath].enter(terminal);
+		} else if (this.pwd[trimedPath].type == 'file') {
 			terminal.print('cd: '+path+': Not a directory');
 		}
 	} else {
