@@ -198,6 +198,7 @@ Filesystem = {
 Filesystem['blog'] = linkFile('http://blog.yesmeck.com');
 Filesystem['douban'] = linkFile('http://www.douban.com/people/coolzi/');
 Filesystem['github'] = linkFile('https://github.com/yesmeck');
+Filesystem['.resume'] = linkFile('http://yesmeck.com/.resume');
 TerminalShell.pwd = Filesystem;
 
 TerminalShell.commands['cd'] = function(terminal, path) {
@@ -216,8 +217,15 @@ TerminalShell.commands['cd'] = function(terminal, path) {
 
 TerminalShell.commands['dir'] =
 TerminalShell.commands['ls'] = function(terminal, path) {
+    var cmd_args = Array.prototype.slice.call(arguments);
+    console.log(cmd_args)
+    cmd_args.shift();
 	var name_list = $('<ul>');
 	$.each(this.pwd, function(name, obj) {
+        console.log(cmd_args[0]);
+        if (cmd_args[0] != '-a' && name.match(/^\..*$/)) {
+            return;
+        }
 		if (obj.type == 'dir') {
 			name += '/';
 		}
